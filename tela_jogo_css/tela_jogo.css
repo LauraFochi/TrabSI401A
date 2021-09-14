@@ -1,0 +1,70 @@
+button{
+font-size:18px;
+border-radius:8px;
+cursor:pointer;
+padding:8px 16px;
+background-color:#E1E1E1;
+}
+
+button.start{
+background-color:#18F264;
+font-size:24px;
+border-radius:28px;
+box-shadow:0 9px #999;
+}
+
+button.trapaca{
+background-color:red;
+font-size:50px;
+color:yellow;
+border-radius:28px;
+box-shadow:0 9px #999;
+}
+
+button.start:active{
+box-shadow: 0 5px #666;
+transform: translateY(4px);
+}
+
+button.trapaca:active{
+box-shadow: 0 5px #666;
+transform: translateY(4px);
+}
+
+section{
+float:left;
+width:70%;
+text-align:center;
+}
+
+table{
+width:100%;
+}
+
+td.coluna{
+font-size:20px;
+font-family:"Times New Roman",Times,Serif;
+width:50%;
+text-align:left;
+}
+
+img{
+width:65%;
+}
+
+aside{
+font-size:16px;
+font-family:"Times New Roman",Times,Serif;
+float:left;
+text-align:center;
+}
+
+caption{
+font-size:20px;
+font-style:italic;
+}
+
+td.historico{
+background-color:#E1E1E1;
+text-align:left;
+}
