@@ -31,7 +31,7 @@ box-shadow: 0 5px #666;
 transform: translateY(4px);
 }
 
-section{
+.div-align{
 float:left;
 width:70%;
 text-align:center;
@@ -43,7 +43,6 @@ width:100%;
 
 td.coluna{
 font-size:20px;
-font-family:"Times New Roman",Times,Serif;
 width:50%;
 text-align:left;
 }
@@ -54,7 +53,6 @@ width:65%;
 
 aside{
 font-size:16px;
-font-family:"Times New Roman",Times,Serif;
 float:left;
 text-align:center;
 }

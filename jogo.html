@@ -1,64 +1,66 @@
 <!DOCTYPE HTML>
 
-<html>
+<html lang="pt">
 
-<head>
-  <title>Tela de Jogo</title>
-  <link rel="stylesheet" type="text/css" href="tela_jogo_css/tela_jogo.css"/>
-</head>
+  <head>
+    <title>Tela de Jogo</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="tela_jogo_css/tela_jogo.css" />
+  </head>
 
-<body>
-    <section>
+  <body>
+    <div class="div-align">
       <table>
         <tr>
-            <td class="coluna">Usuário:&nbsp;Gabriel Santos Bueno<br>
-                Tempo de partida:&nbsp;01:55
-            </td>
-            <td class="coluna">Dificuldade:&nbsp;Rivotril<br>
-                Dimensões:&nbsp;6x5
-            </td>
+          <td class="coluna">UsuÃ¡rio:&nbsp;Gabriel Santos Bueno<br>
+            Tempo de partida:&nbsp;01:55
+          </td>
+          <td class="coluna">Dificuldade:&nbsp;Rivotril<br>
+            DimensÃµes:&nbsp;6x5
+          </td>
         </tr>
       </table>
-            <br>
-            <img src="tela_jogo_css/campo_minado.png">
-            <br>
-            <button onclick="window.location.href='edicao.html'">Editar configurações pessoais</button>&nbsp;&nbsp;&nbsp;&nbsp;
-            <button onclick="window.location.href='ranking.html'">Visualizar Ranking</button>
-    </section>
+      <br>
+      <img alt="Imagem simulando o jogo" src="tela_jogo_css/campo_minado.png">
+      <br>
+      <button onclick="window.location.href='edicao.html'">Editar configuraÃ§Ãµes
+        pessoais</button>&nbsp;&nbsp;&nbsp;&nbsp;
+      <button onclick="window.location.href='ranking.html'">Visualizar Ranking</button>
+    </div>
 
     <aside>
       <br>
       <button class="start">Novo Jogo</button><br><br><br>
-      <button class="trapaca">Trapaça</button><br><br><br>
-        <table>
-          <caption>Histórico de Partidas</caption>
-          <tr>
-            <td class="historico">
-              Jogador:<br>
-              Dimensão:<br>
-              Número de Bombas:<br>
-              Modalidade:<br>
-              Tempo Gasto:<br>
-              Resultado:<br>
-              Data/Hora:
-            </td>
-          </tr>
-          <tr>
-            <td class="historico">
-              Jogador:<br>
-              Dimensão:<br>
-              Número de Bombas:<br>
-              Modalidade:<br>
-              Tempo Gasto:<br>
-              Resultado:<br>
-              Data/Hora:
-            </td>
-          </tr>
-        </table>
-        <br>
-        <button class="sair" onclick="window.location.href ='index.html'">Sair</button>
+      <button class="trapaca">TrapaÃ§a</button><br><br><br>
+      <table>
+        <caption>HistÃ³rico de Partidas</caption>
+        <tr>
+          <td class="historico">
+            Jogador:<br>
+            DimensÃ£o:<br>
+            NÃºmero de Bombas:<br>
+            Modalidade:<br>
+            Tempo Gasto:<br>
+            Resultado:<br>
+            Data/Hora:
+          </td>
+        </tr>
+        <tr>
+          <td class="historico">
+            Jogador:<br>
+            DimensÃ£o:<br>
+            NÃºmero de Bombas:<br>
+            Modalidade:<br>
+            Tempo Gasto:<br>
+            Resultado:<br>
+            Data/Hora:
+          </td>
+        </tr>
+      </table>
+      <br>
+      <button class="sair" onclick="window.location.href='index.html'">Sair</button>
     </aside>
 
-</body>
+  </body>
 
 </html>

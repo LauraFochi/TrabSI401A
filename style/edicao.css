@@ -4,11 +4,6 @@
     box-sizing: border-box;
 }
 
-@font-face {
-    font-family: Roboto-Regular;
-    src: url(../fonts/Roboto/Roboto-Regular.ttf);
-}
-
 body{
     background-color: white;
 }
@@ -57,7 +52,6 @@ header{
 a{
     font-size: 20px;
     padding: 10px;
-    font-family: Roboto-Regular;
 }
 
 input{
@@ -67,7 +61,6 @@ input{
     background-color: #C4C4C4;
     border: 1px solid #C4C4C4;
     font-size: 20px;
-    font-family: Roboto-Regular;
 }
 
 #special{
@@ -91,7 +84,6 @@ button{
     margin-left: 3%;
     margin-right: 3%;
     font-size: 20px;
-    font-family: Roboto-Regular;
     background-color: #E5E5E5;
     border: 1px solid #E5E5E5;
     opacity: 0.8;

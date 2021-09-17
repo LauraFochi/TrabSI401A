@@ -1,40 +1,45 @@
 <!DOCTYPE html>
 <html lang="pt">
 
-<head>
-    <link rel="stylesheet" type="text/css" href="index.css">
-    <meta charset="UTF-8">
-    <title>Trab SI401A - Login</title>
-</head>
+    <head>
+        <link rel="stylesheet" type="text/css" href="index.css">
+        <meta charset="UTF-8">
+        <title>Trab SI401A - Login</title>
+    </head>
 
-<body>
+    <body>
 
-    <header>
-        Login
-    </header>
+        <header>
+            Login
+        </header>
 
-    <main>
-        
-        <label for="username">Usuário</label>
+        <main>
+
+            <label for="username">Usuário</label>
             <br>
-        <input type="text" placeholder="Insira o usuário" name="username" required>
-        
+            <input id="username" type="text" placeholder="Insira o usuário"
+                name="username" required>
 
-        <br><br>
-        
-        <label for="password">Senha</label>
-        <br>
-        <input type="password" placeholder="Insira a senha" name="password" required>
 
-        <br><br><br>
-
-        <section id="button-section">
-            <button type="submit" onclick="window.location.href='jogo.html'">Entrar</button>
             <br><br>
-            <button type="button" onclick="window.location.href='cadastro.html'">Criar conta</button>
-        </section>
-        
-    </main>
-</body>
+
+            <label for="password">Senha</label>
+            <br>
+            <input id="password" type="password" placeholder="Insira a senha"
+                name="password"
+                required>
+
+            <br><br><br>
+
+            <div id="button-section">
+                <button type="submit"
+                    onclick="window.location.href='jogo.html'">Entrar</button>
+                <br><br>
+                <button type="button"
+                    onclick="window.location.href='cadastro.html'">Criar conta</button>
+            </div>
+
+        </main>
+    </body>
 
 </html>

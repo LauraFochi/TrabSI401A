@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt">
     <head>
+        <meta charset="UTF-8">
         <title>Informações pessoais</title>
         <link rel="stylesheet" type="text/css" href="style/edicao.css">
     </head>
-    
+
     <body>
         <header>
             <a id="titulo">Informações pessoais</a>
@@ -12,33 +13,35 @@
 
         <div class="container">
             <div class="box">
-                <a id="info">Nome Completo</a>
+                <a>Nome Completo</a>
                 <input type="text"><br><br>
-                <a id="info">CPF</a>
-                <input id="special" type="text"><br><br>
-                <a id="info">Data de Nascimento</a>
-                <input id="special" type="text"><br><br>
-                <a id="info">Telefone</a>
+                <a>CPF</a>
+                <input id="dataAniver" type="text"><br><br>
+                <a>Data de Nascimento</a>
+                <input id="telefone" type="text"><br><br>
+                <a>Telefone</a>
                 <input type="text"><br><br>
-                <a id="info">Email</a>
+                <a>Email</a>
                 <input type="text">
             </div>
         </div>
 
         <div class="containerLogin">
             <div class="boxLogin">
-                <a id="info">Usuário</a>
-                <input id="special" type="text"><br><br>
-                <a id="info">Senha</a>
+                <a>Usuário</a>
+                <input id="senha" type="text"><br><br>
+                <a>Senha</a>
                 <input type="text"><br><br>
-                <a id="info">Confirmar Senha</a>
+                <a>Confirmar Senha</a>
                 <input type="text"><br><br>
             </div>
         </div>
-        
+
         <footer>
-            <button id="voltar" type="submit">Voltar</button>
-            <button id="salvar" type="submit">Salvar</button>
+            <button id="voltar" type="submit"
+                onclick="window.location.href='jogo.html'">Voltar</button>
+            <button id="salvar" type="submit"
+                onclick="window.location.href='jogo.html'">Salvar</button>
         </footer>
     </body>
 </html>
