@@ -1,0 +1,69 @@
+body{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+.container{
+  max-width: 700px;
+  width: 100%;
+  background-color: #fff;
+  padding: 25px 30px;
+  border-radius: 5px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+}
+.container .title{
+  font-size: 25px;
+  font-weight: 500;
+  position: relative;
+}
+.conteudo form .detalhes-usuario{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px 0 12px 0;
+}
+form .detalhes-usuario .inputbox{
+  margin-bottom: 15px;
+  width: calc(100% / 2 - 20px);
+}
+form .inputbox span.detalhes{
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.detalhes-usuario .inputbox input{
+  height: 45px;
+  width: 100%;
+  outline: none;
+  font-size: 16px;
+  border-radius: 5px;
+  padding-left: 15px;
+  border: 1px solid #ccc;
+  border-bottom-width: 2px;
+}
+.detalhes-usuario .inputbox input:focus,
+.detalhes-usuario .inputbox input:valid{
+  border-color: lightblue;
+}
+ form .botao{
+   height: 45px;
+   margin: 35px 0
+ }
+ form .botao input{
+   height: 100%;
+   width: 100%;
+   border-radius: 5px;
+   border: none;
+   color: #fff;
+   font-size: 18px;
+   font-weight: 500;
+   letter-spacing: 1px;
+   cursor: pointer;
+   background: lightblue;
+   margin-bottom: 10px;
+ }
+ form .button input:hover{
+  background: lightblue;
+  }
