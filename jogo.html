@@ -10,25 +10,28 @@
 
   <body>
     <div class="div-align">
-      <table>
-	    <form>
+      <form>
+        <table>
           <tr>
             <td class="coluna">Usuário:&nbsp;Gabriel Santos Bueno<br>
-              Tempo de partida:&nbsp;01:55
+
+              <a>Tempo de partida: </a> <a id="cronometro">00:00:00</a>
             </td>
             <td class="coluna">
-              Número de linhas:&nbsp;&nbsp;&nbsp;<input id="linha" type="number" maxlength="1" size="3"><br>
-			  Número de colunas:&nbsp;<input id="coluna" type="number" maxlength="1" size="3"><br>
+              Número de linhas:&nbsp;&nbsp;&nbsp;<input id="linha" type="text"
+                maxlength="1" size="3"><br>
+              Número de colunas:&nbsp;<input id="coluna" type="text"
+                maxlength="1" size="3"><br>
             </td>
-		    <td class="coluna">
-			  Dificuldade:&nbsp;
-			  <select id="nivel">
-			    <option value="classico">Clássico</option>
-				<option value="rivotril">Rivotril</option>
-			  </select>
-		    </td>
+            <td class="coluna">
+              Dificuldade:&nbsp;
+              <select id="nivel">
+                <option value="classico">Clássico</option>
+                <option value="rivotril">Rivotril</option>
+              </select>
+            </td>
           </tr>
-	    </form>
+        </form>
       </table>
       <br>
       <img alt="Imagem simulando o jogo" src="assets/campo_minado.png">
@@ -40,7 +43,7 @@
 
     <aside>
       <br>
-      <button class="start">Novo Jogo</button><br><br><br>
+      <button onclick="iniciar()" class="start">Novo Jogo</button><br><br><br>
       <button class="trapaca">Trapaça</button><br><br><br>
       <table>
         <caption>Histórico de Partidas</caption>
@@ -70,7 +73,7 @@
       <br>
       <button class="sair" onclick="window.location.href='index.html'">Sair</button>
     </aside>
-
+    <script src="script/tela_jogo.js"></script>
   </body>
 
   <script src="code/jogo.js"></script>
