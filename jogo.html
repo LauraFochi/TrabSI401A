@@ -10,8 +10,8 @@
 
   <body>
     <div class="div-align">
-      <form>
-        <table>
+      <table>
+        <form>
           <tr>
             <td class="coluna">Usuário:&nbsp;Gabriel Santos Bueno<br>
 
@@ -34,7 +34,9 @@
         </form>
       </table>
       <br>
-      <img alt="Imagem simulando o jogo" src="assets/campo_minado.png">
+      <div id='table-shower'>
+        <img alt="Imagem simulando o jogo" src="assets/campo_minado.png">
+      </div>
       <br>
       <button onclick="window.location.href='edicao.html'">Editar configurações
         pessoais</button>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -48,11 +50,11 @@
       <caption>Histórico de Partidas</caption>
       <table>
         <tbody id="tabelaHistorico">
-          
+
         </tbody>
       </table>
       <br>
-      <button class="sair" onclick="window.location.href='index.html'">Sair</button>
+      <button class="sair" onclick="startGame()">Sair</button>
     </aside>
     <script src="script/tela_jogo.js"></script>
   </body>
