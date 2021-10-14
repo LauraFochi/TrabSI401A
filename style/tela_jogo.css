@@ -62,13 +62,12 @@ font-size:20px;
 font-style:italic;
 }
 
-tr.historico{
-background-color:#E1E1E1;
-text-align:left;
-}
-
-td.historico{
+li.historico{
     background-color:#E1E1E1;
     text-align:left;
-    width: 100%;
+}
+
+ul.historico{
+    background-color:#E1E1E1;
+    text-align:left;
 }
