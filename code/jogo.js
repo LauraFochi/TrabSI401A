@@ -1,3 +1,5 @@
+var trapaca = 0; //desativado
+
 var tabuleiro = [[0, 0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0, 0],
@@ -76,8 +78,50 @@ function realizarJogada(tabuleiro, posicaoJogada) {
 
 }
 
+function ler_nivel(){
+	var selecao = document.getElementById("nivel"); //pega o vetor de opcoes disponiveis
+	var nivel = selecao[selecao.selectedIndex].value; //o indice da opcao escolhida
+	return nivel; // retorna string "classico" ou "rivotril"
+}
+
 function checarVitoria() { //APENAS PARA TESTE - REMOVER
     return false
 }
 
+function ler_dimen(){
+    var l = document.getElementById("linha").value;
+    var c = document.getElementById("coluna").value;
+
+    var dimen = [l,c];    
+
+    /*var matriz = new Array(l);
+
+    for(var i=0; i<l; i++){
+	   matriz[i] = new Array(c);
+    }
+	
+	gerar_tabuleiro(matriz);*/
+
+    return dimen;
+}
+
 function gerarTabuleiro () {} //APENAS PARA TESTE - REMOVER
+
+function pontuacao(){
+	n = ler_nivel();
+	d = ler_dimen();
+	
+	var ponto_jogada = 0;  //representa a pontuação de uma jogada bem sucedida
+	
+	if(trapaca==0){   //se modo trapaca não foi ativado
+	   if(n == "classico"){
+	      ponto_jogada+=5;
+	   }
+	   else{
+		  ponto_jogada+=10;   
+	   }
+	   ponto_jogada += (d[0]+d[1])*0.2; //adiciona 0.2 (ao ponto por jogada) por cada quadradinho no tabuleiro
+	}
+	
+	return ponto_jogada; //se trapaca esta ativado, retorna ponto_jogada = 0
+}
