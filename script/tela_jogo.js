@@ -1,5 +1,7 @@
 "use strict"
 
+//metodos para o funcionamento do CRONOMETRO
+
 var hh = 0;
 var mm = 0;
 var ss = 0;
@@ -47,3 +49,41 @@ function cronometro(){
     document.getElementById('cronometro').innerText = formatar;
 }
 
+
+//metodos para o funcionamento do HISTORICO
+
+var tabelaHistorico = document.getElementById('tabelaHistorico');
+var listaHistoricos = [];
+
+function atualizarHistorico(jogador,dimensao,numBombas,modalidade,tempoGasto,resultado){
+    console.log("att");
+    /*if(listaHistoricos.length === 0){
+        tabelaHistorico.innerHTML = "<tr> <td class='historico'> Jogador: <br> Dimensão: <br> Número de Bombas:<br> Modalidade:<br> Tempo Gasto:<br> Resultado:<br> Data/Hora: </td> </tr>";
+        return;
+    }*/
+    var quebraLinha = document.createElement('br')
+    var linha = document.createElement('tr')
+    linha.className='historico'
+    
+
+    var campoJogador = document.createElement('td')
+    campoJogador.innerText = "Jogador: " + jogador;
+
+    var campoDimensao = document.createElement('td')
+    campoDimensao.innerText = "Dimensao: " + dimensao;
+
+    campoJogador.className='historico'
+    campoDimensao.className='historico'
+    
+    //dados.innerHTML = new Date();
+    linha.appendChild(campoJogador)
+    linha.appendChild(quebraLinha)
+    linha.appendChild(campoDimensao)
+    tabelaHistorico.appendChild(linha)
+}
+
+
+
+//evento ao carregar a pag
+
+window.addEventListener('load',atualizarHistorico("victor","10x10","8","dificil","20min","perdeu"));
