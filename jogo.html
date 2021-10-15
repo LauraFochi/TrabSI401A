@@ -10,8 +10,8 @@
 
   <body>
     <div class="div-align">
-      <form>
-        <table>
+      <table>
+        <form>
           <tr>
             <td class="coluna">Usuário:&nbsp;Gabriel Santos Bueno<br>
 
@@ -19,9 +19,9 @@
             </td>
             <td class="coluna">
               Número de linhas:&nbsp;&nbsp;&nbsp;<input id="linha" type="text"
-                maxlength="1" size="3"><br>
+                maxlength="2" size="3"><br>
               Número de colunas:&nbsp;<input id="coluna" type="text"
-                maxlength="1" size="3"><br>
+                maxlength="2" size="3"><br>
             </td>
             <td class="coluna">
               Dificuldade:&nbsp;
@@ -34,7 +34,9 @@
         </form>
       </table>
       <br>
-      <img alt="Imagem simulando o jogo" src="assets/campo_minado.png">
+      <div id='table-shower'>
+        <img alt="Imagem simulando o jogo" src="assets/campo_minado.png">
+      </div>
       <br>
       <button onclick="window.location.href='edicao.html'">Editar configurações
         pessoais</button>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -44,19 +46,17 @@
     <aside>
       <br>
       <button onclick="iniciar()" class="start">Novo Jogo</button><br><br><br>
-      <button class="trapaca">Trapaça</button><br><br><br>
+      <button class="trapaca" onclick="ativarTrapaca()">Trapaça</button><br><br><br>
       <caption>Histórico de Partidas</caption>
       <table>
         <tbody id="tabelaHistorico">
-          
+
         </tbody>
       </table>
       <br>
-      <button class="sair" onclick="window.location.href='index.html'">Sair</button>
+      <button class="sair">Sair</button>
     </aside>
-    <script src="script/tela_jogo.js"></script>
   </body>
-
   <script src="code/jogo.js"></script>
 
 </html>
