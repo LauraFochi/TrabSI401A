@@ -1,9 +1,16 @@
 var trapaca = 0; //desativado
+
 var tabuleiro = []
+
 var tamX = 0;
 var tamY = 0;
-var timer = 0;
-var stopTimer = 1;
+
+var hh = 0;
+var mm = 0;
+var ss = 0;
+
+var tempo = 1000;//Quantos milésimos tem 1 seg
+var cron;
 
 const colorByBombsAround = {
     0: '#A3F500',
@@ -16,6 +23,122 @@ const colorByBombsAround = {
     7: '#FF9200',
     8: '#FF7400',
     9: '#FF0000'
+}
+
+
+//ao clicar em "novo jogo"
+function iniciar(){
+    //para reiniciar o cron
+    finalizar();
+
+    cron = setInterval(() => { cronometro(); }, tempo);
+
+    gerarTabuleiro()
+}
+
+//no momento em que o jogador vencer ou for derrotado
+function finalizar(){
+    clearInterval(cron);
+    hh = 0;
+    mm = 0;
+    ss = 0;
+
+    document.getElementById('cronometro').innerText = '00:00:00';
+}
+
+//main
+function cronometro(){
+    ss++;
+
+    if (ss == 60){
+        ss = 0;
+        mm++;
+
+        if (mm == 60){
+            mm = 0;
+            hh++;
+
+            if(hh == 25){
+                hh = 0;
+            }
+        }
+    }
+
+    var formatar = (hh < 10 ? '0' + hh : hh) + ':' + (mm < 10 ? '0' + mm : mm) + ':' + (ss < 10 ? '0' + ss : ss);
+    document.getElementById('cronometro').innerText = formatar;
+}
+
+
+//metodos para o funcionamento do HISTORICO
+
+var tabelaHistorico = document.getElementById('tabelaHistorico');
+var listaHistoricos = [];
+
+function atualizarHistorico(jogador,dimensao,numBombas,modalidade,tempoGasto,resultado){
+
+    var today = new Date()
+    var GMTstring = today.toGMTString()
+
+    var templateHistorico = {
+        t_jogador: jogador,
+        t_dimensao: dimensao,
+        t_numBombas: numBombas,
+        t_modalidade: modalidade,
+        t_tempoGasto: tempoGasto,
+        t_resultado: resultado,
+        t_data: GMTstring,
+    };
+
+    listaHistoricos.push(templateHistorico);
+
+    /*if(templateHistorico.t_jogador == undefined){
+        var vazio = document.createElement('h3')
+        vazio.innerHTML = "Sem historico"
+        tabelaHistorico.appendChild(vazio)
+        return;
+    }*/
+
+    var historico = listaHistoricos[(listaHistoricos.length - 1)];
+    //alert(historico.t_data);
+
+    var linha = document.createElement('ul')
+    var campoJogador = document.createElement('li')
+    var campoDimensao = document.createElement('li')
+    var campoNumBombas = document.createElement('li')
+    var campoModalidade = document.createElement('li')
+    var campoTempoGasto = document.createElement('li')
+    var campoResultado = document.createElement('li')
+    var campoData = document.createElement('li')
+
+    linha.className='historico'
+    campoJogador.className='historico'
+    campoDimensao.className='historico'
+    campoNumBombas.className='historico'
+    campoModalidade.className='historico'
+    campoTempoGasto.className='historico'
+    campoResultado.className='historico'
+    campoData.className='historico'
+
+    campoJogador.innerText = "Jogador: " + historico.t_jogador;
+    campoDimensao.innerText = "Dimensao: " + historico.t_dimensao;
+    campoNumBombas.innerText = "Numero de Bombas: " + historico.t_numBombas;
+    campoModalidade.innerText = "Modalidade: " + historico.t_modalidade;
+    campoTempoGasto.innerText = "Tempo levado: " + historico.t_tempoGasto;
+    campoResultado.innerText = "Resultado: " + historico.t_resultado;
+    campoData.innerText = historico.t_data;
+
+    linha.appendChild(campoJogador)
+    linha.appendChild(campoDimensao)
+    linha.appendChild(campoNumBombas)
+    linha.appendChild(campoModalidade)
+    linha.appendChild(campoTempoGasto)
+    linha.appendChild(campoResultado)
+    linha.appendChild(campoData)
+
+    tabelaHistorico.appendChild(linha)
+
+    return(listaHistoricos)
+
 }
 
 var posicaoJogada = [gerarRandomicoInteiro(0,5), gerarRandomicoInteiro(0,5)]
@@ -147,17 +270,15 @@ const gerarTabuleiro = (tamanhoX = 10, tamanhoY = 10, qtdBombas = 10 ) =>  {
         tabuleiro[x].push(0)
     }
   }
-
   distribuirBombas(tabuleiro, qtdBombas);
   displayTable();
 }
 
 const displayTable = (displayElementId = 'table-shower') => {
-  const div = this.document.getElementById(displayElementId);
-  cleanNode(div);
-
-   const table = this.document.createElement('table');
-   table.className='table-style'
+    const div = this.document.getElementById(displayElementId);
+    cleanNode(div);
+    const table = this.document.createElement('table');
+    table.className='table-style'
    tabuleiro.map((xTab, indexX) => {
      const tr = this.document.createElement('tr')
      tr.className='table-style'
@@ -179,7 +300,6 @@ const displayTable = (displayElementId = 'table-shower') => {
    div.appendChild(table)
    console.log(JSON.stringify(tabuleiro))
 
-   return tabuleiro;
 }
 
 const checkBombsAround = (indexX, indexY) => {
@@ -212,39 +332,4 @@ const resetGame = (displayElementId = 'table-shower') => {
     const timerDiv = document.getElementById('timer');
     cleanNode(timerDiv);
     timerDiv.appendChild(document.createTextNode('00:00'))
-}
-
-const startTimer = () => {
-    stopTimer = 0;
-    updateTimer()
-}
-
-const updateTimer = () => {
-    if(stopTimer) return 0;
-    console.log(timer)
-    setTimeout(() => {
-        timer+=1;
-        updateTimer()
-        updateTimerDisplay()
-    }, 1000)
-}
-
-const updateTimerDisplay = () => {
-    const timerDiv = document.getElementById('timer');
-    cleanNode(timerDiv);
-    const min = padLeadingZeros((timer/60).toFixed(), 2)
-    const sec = padLeadingZeros((timer%60).toFixed(), 2)
-    timerDiv.appendChild(document.createTextNode(`${min}:${sec}`))
-}
-
-// Direto da interwebs
-function padLeadingZeros(num, size) {
-    var s = num+"";
-    while (s.length < size) s = "0" + s;
-    return s;
-}
-
-const startGame = () => {
-    startTimer()
-    gerarTabuleiro()
 }

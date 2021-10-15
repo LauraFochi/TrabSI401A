@@ -62,7 +62,6 @@ font-size:20px;
 font-style:italic;
 }
 
-<<<<<<< HEAD
 li.historico{
     background-color:#E1E1E1;
     text-align:left;
@@ -71,7 +70,8 @@ li.historico{
 ul.historico{
     background-color:#E1E1E1;
     text-align:left;
-=======
+}
+
 td.historico{
 background-color:#E1E1E1;
 text-align:left;
@@ -88,5 +88,4 @@ text-align:left;
 .table-style td {
 	height: 100%;
 	width: 6vw;
->>>>>>> 8e25e82 (Resolvendo conflitos encima da minha branch)
 }
