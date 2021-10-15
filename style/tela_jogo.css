@@ -33,12 +33,12 @@ transform: translateY(4px);
 
 .div-align{
 float:left;
-width:70%;
+width:80%;
 text-align:center;
 }
 
 table{
-width:100%;
+width:98%;
 }
 
 td.coluna{
@@ -48,7 +48,7 @@ text-align:left;
 }
 
 img{
-width:65%;
+width:45%;
 }
 
 aside{

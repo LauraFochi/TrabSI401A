@@ -229,17 +229,27 @@ function ler_dimen(){
     var l = document.getElementById("linha").value;
     var c = document.getElementById("coluna").value;
 
-    var dimen = [l,c];
-
+	if(l>=0 && c>=0){
+		if(l<=12 && c<=12){
+			var dimen = [l,c];
+			return dimen;
+		}
+		else{
+			alert("O número máximo para linhas ou colunas é 12!");
+			document.getElementById("linha").value = "";
+			document.getElementById("coluna").value = "";
+		}
+	}
+	else{
+		alert("O número mínimo para linhas ou colunas é 0!");
+		document.getElementById("linha").value = "";
+		document.getElementById("coluna").value = "";
+	}
     /*var matriz = new Array(l);
 
     for(var i=0; i<l; i++){
 	   matriz[i] = new Array(c);
-    }
-
-	gerar_tabuleiro(matriz);*/
-
-    return dimen;
+    }*/
 }
 
 function pontuacao(){
@@ -258,7 +268,7 @@ function pontuacao(){
 	   ponto_jogada += (d[0]+d[1])*0.2; //adiciona 0.2 (ao ponto por jogada) por cada quadradinho no tabuleiro
 	}
 
-	return ponto_jogada; //se trapaca esta ativado, retorna ponto_jogada = 0
+	return ponto_jogada; //se trapaca esta ativado, retorna zero
 }
 
 const cleanNode = element => {
