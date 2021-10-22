@@ -137,7 +137,6 @@ function gerarRandomicoInteiro(min, max) {
  *  Distribui bombas aleatorias pelo tabuleiro
  */
 function distribuirBombas() {
-
     for(var i=0; i<numBombas; i++) {
         var novaPosicao
 
