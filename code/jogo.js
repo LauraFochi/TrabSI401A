@@ -1,22 +1,28 @@
-var usouTrapaca = 0; //desativado
+var usouTrapaca = 0; // Quantidade de vezes que usou trapaça.
 var tabuleiro = []
 var numBombas = 0;
-var tamX = 0;
-var tamY = 0;
+var tamX = 0; // Quantidade de colunas.
+var tamY = 0; // Quantidade de linhas.
 
-var gameOn = false;
+var pontuacao = 0; // Pontiação Final do usuário.
 
-var hh = 0;
-var mm = 0;
-var ss = 0;
+var gameOn = false; // Indica se o jogo está rodando;
 
-var timeTimer = 0;
-var pararTimer = true;
-
-var tempo = 1000;//Quantos milésimos tem 1 seg
 var cron;
-var timeCron = '00:00:00'
+var time = 0; // Tempo decorrido do jogo
+var timeCron = '00:00:00' // Label do cron para display
 
+var timeTimer = 0; // Tempo restante de jogo (para o modo rivotril)
+var pararTimer = true; // Indica se o timer (do modo rivotril) deve ser parado.
+
+var umSegundo = 1000; //Quantos milésimos tem 1 seg
+
+var listaHistoricos = [];
+var tabelaHistorico = document.getElementById('tabelaHistorico');
+
+/**
+ * Define a cor de periculosidade de acordo com a qtd de bombas envolta
+ */
 const colorByBombsAround = {
     0: '#A3F500',
     1: '#CFFA00',
@@ -31,7 +37,70 @@ const colorByBombsAround = {
 }
 
 
-//ao clicar em "novo jogo"
+ // FUNÇÕES DE CRONOMETO - VICTOR
+
+/**
+ * Inicia o cronometro
+ */
+function cronometro(){
+    time++;
+
+    var formatar = (pad(time/3600, 2)) + ':' + (pad(time/36, 2)) + ':' + (pad(time%60, 2));
+    if (ler_nivel() === 'classico') {
+        document.getElementById('cronometro').innerText = formatar;
+    }
+    timeCron = formatar
+}
+
+/**
+ * Reseta o cronometro
+ */
+function resetCron(){
+    clearInterval(cron);
+    time = 0;
+    document.getElementById('cronometro').innerText = '00:00:00';
+}
+
+// FUNÇÕES DE TIME - KUGEL
+
+/**
+ * Inicia o timer
+ */
+const startTimer = () => {
+    const tamX = ler_dimen()[0];
+    const tamY = ler_dimen()[1];
+    timeTimer = tamX * tamY * 5;
+    pararTimer = false;
+    setTimeout(() => attTimeTimer(timeTimer), umSegundo);
+}
+
+/**
+ * Atualiza o timer
+ * @param {*} time tempo atual do timer
+ * @returns retorna void caso precise parar o timer (vitoria ou derrota)
+ */
+const attTimeTimer = (time) => {
+    const hrs = pad(timeTimer/3600 > 0 ? timeTimer/3600 : 0, 2);
+    const mins = pad(timeTimer/60 > 0 ? timeTimer/60 : 0, 2);
+    const secs = pad((timeTimer%60) > 0 ? (timeTimer%60) : 0, 2);
+    document.getElementById('cronometro').innerHTML = `${hrs}:${mins}:${secs}`
+    if (pararTimer)
+     return;
+    if (!timeTimer && !pararTimer){
+        alert("Acabou seu tempo!")
+        atualizarHistorico("Jogador Sem Login", `${ler_dimen()[0]}x${ler_dimen()[1]}`, numBombas, ler_nivel(), "Perdeu")
+        resetGame();
+    }
+    timeTimer = time - 1;
+    setTimeout(() => attTimeTimer(timeTimer), umSegundo);
+}
+
+// FUNÇÕES DE COMEÇO DE JOGO - GABRIEL
+
+/**
+ * Inicia o jogo;
+ * @returns reseta os dados do game, caso não haja dimensões
+ */
 function iniciar(){
     gameOn = true;
     //para reiniciar o cron
@@ -40,7 +109,9 @@ function iniciar(){
     if (this.document.getElementById('nivel').value === 'rivotril') {
         startTimer()
     }
-    cron = setInterval(() => { cronometro(); }, tempo);
+
+    //Inicia o cronometro
+    cron = setInterval(() => { cronometro(); }, umSegundo);
 
     if(!ler_dimen()) {
         return resetGame();
@@ -48,122 +119,35 @@ function iniciar(){
     gerarTabuleiro()
 }
 
-//no momento em que o jogador vencer ou for derrotado
-function resetCron(){
-    clearInterval(cron);
-    hh = 0;
-    mm = 0;
-    ss = 0;
+  // FUNÇÕES PARA DISTRIBUIR BOMBAS - LAURA
 
-    document.getElementById('cronometro').innerText = '00:00:00';
-}
-
-//main
-function cronometro(){
-    ss++;
-
-    if (ss == 60){
-        ss = 0;
-        mm++;
-
-        if (mm == 60){
-            mm = 0;
-            hh++;
-
-            if(hh == 25){
-                hh = 0;
-            }
-        }
-    }
-
-    var formatar = (hh < 10 ? '0' + hh : hh) + ':' + (mm < 10 ? '0' + mm : mm) + ':' + (ss < 10 ? '0' + ss : ss);
-    if (ler_nivel() === 'classico') {
-        document.getElementById('cronometro').innerText = formatar;
-    }
-    timeCron = formatar
-}
-
-
-//metodos para o funcionamento do HISTORICO
-
-var tabelaHistorico = document.getElementById('tabelaHistorico');
-var listaHistoricos = [];
-
-function atualizarHistorico(jogador,dimensao,numBombas,modalidade,resultado){
-
-    var today = new Date()
-
-    var templateHistorico = {
-        t_jogador: jogador,
-        t_dimensao: dimensao,
-        t_numBombas: numBombas,
-        t_modalidade: modalidade,
-        t_tempoGasto: timeCron,
-        t_resultado: resultado,
-        t_data: `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} - ${today.getDate()}/${today.getMonth() +1 }/${today.getFullYear()}`,
-    };
-
-    listaHistoricos.push(templateHistorico);
-
-    var historico = listaHistoricos[(listaHistoricos.length - 1)];
-
-    var linha = document.createElement('ul')
-
-    var campoJogador = document.createElement('li')
-    var campoDimensao = document.createElement('li')
-    var campoNumBombas = document.createElement('li')
-    var campoModalidade = document.createElement('li')
-    var campoTempoGasto = document.createElement('li')
-    var campoResultado = document.createElement('li')
-    var campoData = document.createElement('li')
-
-    linha.className='historico'
-    campoJogador.className='historico'
-    campoDimensao.className='historico'
-    campoNumBombas.className='historico'
-    campoModalidade.className='historico'
-    campoTempoGasto.className='historico'
-    campoResultado.className='historico'
-    campoData.className='historico'
-
-    campoJogador.innerText = "Jogador: " + historico.t_jogador;
-    campoDimensao.innerText = "Dimensao: " + historico.t_dimensao;
-    campoNumBombas.innerText = "Numero de Bombas: " + historico.t_numBombas;
-    campoModalidade.innerText = "Modalidade: " + historico.t_modalidade;
-    campoTempoGasto.innerText = "Tempo levado: " + historico.t_tempoGasto;
-    campoResultado.innerText = "Resultado: " + historico.t_resultado;
-    campoData.innerText = historico.t_data;
-
-    linha.appendChild(campoJogador)
-    linha.appendChild(campoDimensao)
-    linha.appendChild(campoNumBombas)
-    linha.appendChild(campoModalidade)
-    linha.appendChild(campoTempoGasto)
-    linha.appendChild(campoResultado)
-    linha.appendChild(campoData)
-
-    tabelaHistorico.appendChild(linha)
-
-    return(listaHistoricos)
-
-}
-
-var posicaoJogada = [gerarRandomicoInteiro(0,5), gerarRandomicoInteiro(0,5)]
-var numeroDeBombas = gerarRandomicoInteiro(1, 30)
-
+/**
+ * Procura elemento em um array
+ * @param {*} array o arry
+ * @param {*} elementoProcurado o elemento procurado
+ * @returns true se encontra, ou false caso contrário
+ */
 function encontrarNoArray(array, elementoProcurado) {
     var resultado = array.find(function(elemento) {
       return (JSON.stringify(elemento) === JSON.stringify(elementoProcurado));
     })
     return resultado != null
   }
-
+/**
+ * Gera um randomico inteiro
+ * @param {*} min valor min que pode assumir
+ * @param {*} max valor max que pode assumir
+ * @returns numero inteiro aleatorio
+ */
 function gerarRandomicoInteiro(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+/**
+ *  Distribui bombas aleatorias pelo tabuleiro
+ */
 function distribuirBombas() {
     var posicoesDasBombas = []
 
@@ -186,18 +170,25 @@ function distribuirBombas() {
     }
 }
 
-function realizarJogada(x, y) {
+// Função Realizar jogadas - LAURA
 
-    for(var linha=0; linha < tabuleiro.length; linha++) {
-        for(var coluna=0; coluna < tabuleiro[linha].length; coluna++) {
-            if (x === linha && y === coluna) {
-                if (tabuleiro[linha][coluna] < 0) {
+/**
+ * Realiza jogada no tabuleiro
+ * @param {*} x posição da coluna
+ * @param {*} y posição da linha
+ */
+function realizarJogada(x, y) {
+    calcPontuacao();
+    for(var coluna=0; coluna < tabuleiro.length; coluna++) {
+        for(var linha=0; linha < tabuleiro[coluna].length; linha++) {
+            if (x === coluna && y === linha) {
+                if (tabuleiro[coluna][linha] < 0) {
                     alert("Clicou na bomba ow comédia")
                     atualizarHistorico("Jogador Sem Login", `${ler_dimen()[0]}x${ler_dimen()[1]}`, numBombas, ler_nivel(), "Perdeu")
                     resetGame();
                     return;
                 }
-                tabuleiro[linha][coluna] = 1;
+                tabuleiro[coluna][linha] = 1;
             }
 
         }
@@ -215,12 +206,7 @@ function realizarJogada(x, y) {
 
 }
 
-function ler_nivel(){
-	var selecao = document.getElementById("nivel"); //pega o vetor de opcoes disponiveis
-	var nivel = selecao[selecao.selectedIndex].value; //o indice da opcao escolhida
-	return nivel; // retorna string "classico" ou "rivotril"
-}
-
+// Função de checar vitoria - Emilly
 function checarVitoria() {
     for(let c = 0; c < tabuleiro.length; c++) {
         for(let cc = 0; cc< tabuleiro[c].length; cc++) {
@@ -232,6 +218,19 @@ function checarVitoria() {
     return true
 }
 
+// Funções de calculo de pontuação - GABRIEL
+/**
+ * Lê e retorna a dificuldade
+ */
+function ler_nivel(){
+	var selecao = document.getElementById("nivel"); //pega o vetor de opcoes disponiveis
+	var nivel = selecao[selecao.selectedIndex].value; //o indice da opcao escolhida
+	return nivel; // retorna string "classico" ou "rivotril"
+}
+
+/**
+ * Lê e valida as dimensões
+ */
 function ler_dimen(){
     var l = document.getElementById("linha").value;
     var c = document.getElementById("coluna").value;
@@ -255,31 +254,43 @@ function ler_dimen(){
 	}
 }
 
-function pontuacao(){
+/**
+ * Calcula a pontuação
+ */
+function calcPontuacao(){
 	n = ler_nivel();
 	d = ler_dimen();
-
 	var ponto_jogada = 0;  //representa a pontuação de uma jogada bem sucedida
 
-	if(trapaca==0){   //se modo trapaca não foi ativado
+	if(usouTrapaca==0){   //se modo trapaca não foi ativado
 	   if(n == "classico"){
 	      ponto_jogada+=5;
 	   }
 	   else{
 		  ponto_jogada+=10;
 	   }
-	   ponto_jogada += (d[0]+d[1])*0.2; //adiciona 0.2 (ao ponto por jogada) por cada quadradinho no tabuleiro
-	}
-
-	return ponto_jogada; //se trapaca esta ativado, retorna zero
+	   pontuacao = ponto_jogada + (d[0]+d[1])*0.2; //adiciona 0.2 (ao ponto por jogada) por cada quadradinho no tabuleiro
+	} else {
+        pontuacao = 0;
+    }
 }
 
+
+
+// FUNÇÕES DE TABULEIRO - KUGEL
+/**
+ * Recebe um elemento e limpa todas a childs dele
+ * @param {*} element elemento para limpar as childs
+ */
 const cleanNode = element => {
   while(element.hasChildNodes()) {
     element.removeChild(element.lastChild);
   }
 }
 
+/**
+ * Gera tabuleiro
+ */
 const gerarTabuleiro = () =>  {
   tabuleiro = [];
   const tamX = ler_dimen()[0];
@@ -295,6 +306,9 @@ const gerarTabuleiro = () =>  {
   displayTable();
 }
 
+/**
+ * Exibi o tabuleiro na tela
+ */
 const displayTable = (trapaca = false, displayElementId = 'table-shower') => {
     if(!gameOn) return;
     const div = this.document.getElementById(displayElementId);
@@ -331,6 +345,9 @@ const displayTable = (trapaca = false, displayElementId = 'table-shower') => {
 
 }
 
+/**
+ * função que conta as bombas envolta dado uma posição.
+ */
 const checkBombsAround = (indexX, indexY) => {
     const indexes = [
         [-1, -1], [0, -1], [1, -1],
@@ -342,6 +359,9 @@ const checkBombsAround = (indexX, indexY) => {
     }, 0);
 }
 
+/**
+ * retorna um elemento img (default do sistema)
+ */
 const elementoImgTabuleiro = () => {
     const img = this.document.createElement('img')
     img.alt = "Imagem simulando o jogo"
@@ -349,8 +369,77 @@ const elementoImgTabuleiro = () => {
     return img
 }
 
+// FUNÇÃO DE ATUALIZAR HISTORICO - VICTOR
+
+/**
+ * @param {*} jogador nome jogador
+ * @param {*} dimensao dimensoes
+ * @param {*} numBombas qtd de bombas
+ * @param {*} modalidade dificuldade
+ * @param {*} resultado resultado
+ * @returns tabela de historico atualizada
+ */
+ function atualizarHistorico(jogador,dimensao,numBombas,modalidade,resultado){
+
+    var today = new Date()
+    var templateHistorico = {
+        t_jogador: jogador,
+        t_dimensao: dimensao,
+        t_numBombas: numBombas,
+        t_modalidade: modalidade,
+        t_tempoGasto: timeCron,
+        t_resultado: resultado,
+        t_pontucao: pontuacao,
+        t_data: `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} - ${today.getDate()}/${today.getMonth() +1 }/${today.getFullYear()}`,
+    };
+
+    listaHistoricos.push(templateHistorico);
+
+    var linha = document.createElement('ul')
+    const lis = [
+        document.createElement('li'),
+        document.createElement('li'),
+        document.createElement('li'),
+        document.createElement('li'),
+        document.createElement('li'),
+        document.createElement('li'),
+        document.createElement('li'),
+        document.createElement('li')
+    ]
+    const lisObject = [
+        {texto:"Jogador: " , propName: "t_jogador"},
+        {texto:"Dimensao: " , propName: "t_dimensao"},
+        {texto:"NumerodeBombas: " , propName: "t_numBombas"},
+        {texto:"Modalidade: " , propName: "t_modalidade"},
+        {texto:"Tempo levado: ", propName: "t_tempoGasto"},
+        {texto:"Resultado: " , propName: "t_resultado"},
+        {texto:"Pontuação: ", propName: "t_pontucao"},
+        {texto:"", propName: "t_data"},
+    ]
+    lis
+    .map(li => {
+        li.className ='historico'
+        return li;
+    })
+    .map((li, index) => {
+        const objList = lisObject[index];
+        li.innerText = objList.texto + templateHistorico[objList.propName]
+        return li;
+    })
+    .forEach(li => linha.appendChild(li));
+    tabelaHistorico.appendChild(linha)
+
+    return listaHistoricos;
+}
+
+
+// Função trapaça - Emilly
+/**
+ * Limpa as informações do jogo, e volta ao começo
+ */
 const resetGame = (displayElementId = 'table-shower') => {
     gameOn = false;
+    pontuacao = 0;
     tabuleiro = [];
     numBombas = 0;
     usouTrapaca = 0;
@@ -363,34 +452,14 @@ const resetGame = (displayElementId = 'table-shower') => {
     div.appendChild(elementoImgTabuleiro())
 }
 
+/**
+ * Ativa trapaça
+ */
 const ativarTrapaca = () => {
     displayTable(true)
     usouTrapaca +=1;
 }
 
-const startTimer = () => {
-    const tamX = ler_dimen()[0];
-    const tamY = ler_dimen()[1];
-    timeTimer = tamX * tamY * 5;
-    pararTimer = false;
-    setTimeout(() => attTimeTimer(timeTimer), 1000)
-}
-
-const attTimeTimer = (time) => {
-    const hrs = pad(timeTimer/3600 > 0 ? timeTimer/3600 : 0, 2);
-    const mins = pad(timeTimer/60 > 0 ? timeTimer/60 : 0, 2);
-    const secs = pad((timeTimer%60) > 0 ? (timeTimer%60) : 0, 2);
-    document.getElementById('cronometro').innerHTML = `${hrs}:${mins}:${secs}`
-    if (pararTimer)
-     return;
-    if (!timeTimer && !pararTimer){
-        alert("Acabou seu tempo!")
-        atualizarHistorico("Jogador Sem Login", `${ler_dimen()[0]}x${ler_dimen()[1]}`, numBombas, ler_nivel(), "Perdeu")
-        resetGame();
-    }
-    timeTimer = time - 1;
-    setTimeout(() => attTimeTimer(timeTimer), 1000);
-}
 
 /**
  * from https://stackoverflow.com/questions/2998784/how-to-output-numbers-with-leading-zeros-in-javascript
