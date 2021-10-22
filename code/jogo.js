@@ -142,9 +142,9 @@ function distribuirBombas() {
 
         do {
             novaPosicao = [gerarRandomicoInteiro(0, tabuleiro.length -1), gerarRandomicoInteiro(0, tabuleiro[0].length - 1)]
-        }  while (tabuleiro[novaPosicao[0], novaPosicao[1]] == -1)        
+        }  while (tabuleiro[novaPosicao[0]][novaPosicao[1]] == -1)        
         
-        tabuleiro[novaPosicao[0], novaPosicao[1]] = -1
+        tabuleiro[novaPosicao[0]][novaPosicao[1]] = -1
     }
 }
 
