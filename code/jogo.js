@@ -4,12 +4,18 @@ var numBombas = 0;
 var tamX = 0;
 var tamY = 0;
 
+var gameOn = false;
+
 var hh = 0;
 var mm = 0;
 var ss = 0;
 
+var timeTimer = 0;
+var pararTimer = true;
+
 var tempo = 1000;//Quantos milésimos tem 1 seg
 var cron;
+var timeCron = '00:00:00'
 
 const colorByBombsAround = {
     0: '#A3F500',
@@ -27,16 +33,23 @@ const colorByBombsAround = {
 
 //ao clicar em "novo jogo"
 function iniciar(){
+    gameOn = true;
     //para reiniciar o cron
-    finalizar();
+    resetCron();
 
+    if (this.document.getElementById('nivel').value === 'rivotril') {
+        startTimer()
+    }
     cron = setInterval(() => { cronometro(); }, tempo);
 
+    if(!ler_dimen()) {
+        return resetGame();
+    }
     gerarTabuleiro()
 }
 
 //no momento em que o jogador vencer ou for derrotado
-function finalizar(){
+function resetCron(){
     clearInterval(cron);
     hh = 0;
     mm = 0;
@@ -64,7 +77,10 @@ function cronometro(){
     }
 
     var formatar = (hh < 10 ? '0' + hh : hh) + ':' + (mm < 10 ? '0' + mm : mm) + ':' + (ss < 10 ? '0' + ss : ss);
-    document.getElementById('cronometro').innerText = formatar;
+    if (ler_nivel() === 'classico') {
+        document.getElementById('cronometro').innerText = formatar;
+    }
+    timeCron = formatar
 }
 
 
@@ -76,31 +92,23 @@ var listaHistoricos = [];
 function atualizarHistorico(jogador,dimensao,numBombas,modalidade,resultado){
 
     var today = new Date()
-    var GMTstring = today.toGMTString()
 
     var templateHistorico = {
         t_jogador: jogador,
         t_dimensao: dimensao,
         t_numBombas: numBombas,
         t_modalidade: modalidade,
-        t_tempoGasto: document.getElementById('cronometro').innerText,
+        t_tempoGasto: timeCron,
         t_resultado: resultado,
-        t_data: GMTstring,
+        t_data: `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} - ${today.getDate()}/${today.getMonth() +1 }/${today.getFullYear()}`,
     };
 
     listaHistoricos.push(templateHistorico);
 
-    /*if(templateHistorico.t_jogador == undefined){
-        var vazio = document.createElement('h3')
-        vazio.innerHTML = "Sem historico"
-        tabelaHistorico.appendChild(vazio)
-        return;
-    }*/
-
     var historico = listaHistoricos[(listaHistoricos.length - 1)];
-    //alert(historico.t_data);
 
     var linha = document.createElement('ul')
+
     var campoJogador = document.createElement('li')
     var campoDimensao = document.createElement('li')
     var campoNumBombas = document.createElement('li')
@@ -175,7 +183,6 @@ function distribuirBombas() {
                 tabuleiro[linha][coluna] = -1
             }
         }
-        console.log("\n") //APENAS PARA TESTE - REMOVER
     }
 }
 
@@ -188,6 +195,7 @@ function realizarJogada(x, y) {
                     alert("Clicou na bomba ow comédia")
                     atualizarHistorico("Jogador Sem Login", `${ler_dimen()[0]}x${ler_dimen()[1]}`, numBombas, ler_nivel(), "Perdeu")
                     resetGame();
+                    return;
                 }
                 tabuleiro[linha][coluna] = 1;
             }
@@ -199,7 +207,6 @@ function realizarJogada(x, y) {
             atualizarHistorico("Jogador Sem Login", `${ler_dimen()[0]}x${ler_dimen()[1]}`, numBombas, ler_nivel(), "Ganhou")
             resetGame()
         }
-
         else {
             displayTable()
         }
@@ -214,7 +221,7 @@ function ler_nivel(){
 	return nivel; // retorna string "classico" ou "rivotril"
 }
 
-function checarVitoria() { //APENAS PARA TESTE - REMOVER
+function checarVitoria() {
     for(let c = 0; c < tabuleiro.length; c++) {
         for(let cc = 0; cc< tabuleiro[c].length; cc++) {
             if (!tabuleiro[c][cc]) {
@@ -228,8 +235,7 @@ function checarVitoria() { //APENAS PARA TESTE - REMOVER
 function ler_dimen(){
     var l = document.getElementById("linha").value;
     var c = document.getElementById("coluna").value;
-
-	if(l>=0 && c>=0){
+	if(l>=0 && c>=0 && l && c){
 		if(l<=12 && c<=12){
 			var dimen = [l,c];
 			return dimen;
@@ -238,18 +244,15 @@ function ler_dimen(){
 			alert("O número máximo para linhas ou colunas é 12!");
 			document.getElementById("linha").value = "";
 			document.getElementById("coluna").value = "";
+            return false;
 		}
 	}
 	else{
 		alert("O número mínimo para linhas ou colunas é 0!");
 		document.getElementById("linha").value = "";
 		document.getElementById("coluna").value = "";
+        return false;
 	}
-    /*var matriz = new Array(l);
-
-    for(var i=0; i<l; i++){
-	   matriz[i] = new Array(c);
-    }*/
 }
 
 function pontuacao(){
@@ -293,6 +296,7 @@ const gerarTabuleiro = () =>  {
 }
 
 const displayTable = (trapaca = false, displayElementId = 'table-shower') => {
+    if(!gameOn) return;
     const div = this.document.getElementById(displayElementId);
     cleanNode(div);
     const table = this.document.createElement('table');
@@ -309,11 +313,11 @@ const displayTable = (trapaca = false, displayElementId = 'table-shower') => {
        }
 
        if (!(celula+1)  && trapaca) {
-           console.log(celula, trapaca)
+
         td.appendChild(document.createTextNode('🔥'))
        }
        td.onclick = () => {
-           console.log(indexX, indexY)
+
          realizarJogada(indexX,indexY)
        }
        tr.appendChild(td)
@@ -346,19 +350,53 @@ const elementoImgTabuleiro = () => {
 }
 
 const resetGame = (displayElementId = 'table-shower') => {
+    gameOn = false;
     tabuleiro = [];
     numBombas = 0;
     usouTrapaca = 0;
-    finalizar()
+    timeTimer = 0;
+    pararTimer = true;
+    timeCron = '00:00:00';
+    resetCron();
     const div = document.getElementById(displayElementId);
     cleanNode(div);
     div.appendChild(elementoImgTabuleiro())
-    const timerDiv = document.getElementById('timer');
-    cleanNode(timerDiv);
-    timerDiv.appendChild(document.createTextNode('00:00'))
 }
 
 const ativarTrapaca = () => {
     displayTable(true)
     usouTrapaca +=1;
+}
+
+const startTimer = () => {
+    const tamX = ler_dimen()[0];
+    const tamY = ler_dimen()[1];
+    timeTimer = tamX * tamY * 5;
+    pararTimer = false;
+    setTimeout(() => attTimeTimer(timeTimer), 1000)
+}
+
+const attTimeTimer = (time) => {
+    const hrs = pad(timeTimer/3600 > 0 ? timeTimer/3600 : 0, 2);
+    const mins = pad(timeTimer/60 > 0 ? timeTimer/60 : 0, 2);
+    const secs = pad((timeTimer%60) > 0 ? (timeTimer%60) : 0, 2);
+    document.getElementById('cronometro').innerHTML = `${hrs}:${mins}:${secs}`
+    if (pararTimer)
+     return;
+    if (!timeTimer && !pararTimer){
+        alert("Acabou seu tempo!")
+        atualizarHistorico("Jogador Sem Login", `${ler_dimen()[0]}x${ler_dimen()[1]}`, numBombas, ler_nivel(), "Perdeu")
+        resetGame();
+    }
+    timeTimer = time - 1;
+    setTimeout(() => attTimeTimer(timeTimer), 1000);
+}
+
+/**
+ * from https://stackoverflow.com/questions/2998784/how-to-output-numbers-with-leading-zeros-in-javascript
+ */
+function pad(num, size) {
+    num = num.toFixed();
+    while (num.length < size) num = "0" + num;
+    return num;
 }
