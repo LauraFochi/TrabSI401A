@@ -45,7 +45,7 @@ const colorByBombsAround = {
 function cronometro(){
     time++;
 
-    var formatar = (pad(time/3600, 2)) + ':' + (pad(time/36, 2)) + ':' + (pad(time%60, 2));
+    var formatar = (pad(time/3600, 2)) + ':' + (pad(time/60, 2)) + ':' + (pad(time%60, 2));
     if (ler_nivel() === 'classico') {
         document.getElementById('cronometro').innerText = formatar;
     }
@@ -122,18 +122,6 @@ function iniciar(){
   // FUNÇÕES PARA DISTRIBUIR BOMBAS - LAURA
 
 /**
- * Procura elemento em um array
- * @param {*} array o arry
- * @param {*} elementoProcurado o elemento procurado
- * @returns true se encontra, ou false caso contrário
- */
-function encontrarNoArray(array, elementoProcurado) {
-    var resultado = array.find(function(elemento) {
-      return (JSON.stringify(elemento) === JSON.stringify(elementoProcurado));
-    })
-    return resultado != null
-  }
-/**
  * Gera um randomico inteiro
  * @param {*} min valor min que pode assumir
  * @param {*} max valor max que pode assumir
@@ -149,24 +137,15 @@ function gerarRandomicoInteiro(min, max) {
  *  Distribui bombas aleatorias pelo tabuleiro
  */
 function distribuirBombas() {
-    var posicoesDasBombas = []
 
     for(var i=0; i<numBombas; i++) {
         var novaPosicao
 
         do {
-            novaPosicao = [[gerarRandomicoInteiro(0, tabuleiro.length -1), gerarRandomicoInteiro(0, tabuleiro[0].length - 1)]]
-        }  while (encontrarNoArray(posicoesDasBombas, novaPosicao))
-
-        posicoesDasBombas.push(novaPosicao)
-    }
-
-    for(var linha=0; linha < tabuleiro.length; linha++) {
-        for(var coluna=0; coluna < tabuleiro[linha].length; coluna++) {
-            if (encontrarNoArray(posicoesDasBombas, [[linha, coluna]])) {
-                tabuleiro[linha][coluna] = -1
-            }
-        }
+            novaPosicao = [gerarRandomicoInteiro(0, tabuleiro.length -1), gerarRandomicoInteiro(0, tabuleiro[0].length - 1)]
+        }  while (tabuleiro[novaPosicao[0], novaPosicao[1]] == -1)        
+        
+        tabuleiro[novaPosicao[0], novaPosicao[1]] = -1
     }
 }
 
@@ -179,31 +158,24 @@ function distribuirBombas() {
  */
 function realizarJogada(x, y) {
     calcPontuacao();
-    for(var coluna=0; coluna < tabuleiro.length; coluna++) {
-        for(var linha=0; linha < tabuleiro[coluna].length; linha++) {
-            if (x === coluna && y === linha) {
-                if (tabuleiro[coluna][linha] < 0) {
-                    alert("Clicou na bomba ow comédia")
-                    atualizarHistorico("Jogador Sem Login", `${ler_dimen()[0]}x${ler_dimen()[1]}`, numBombas, ler_nivel(), "Perdeu")
-                    resetGame();
-                    return;
-                }
-                tabuleiro[coluna][linha] = 1;
-            }
 
-        }
-
-        if (checarVitoria()) {
-            alert("Parabéns! Você ganhou o jogo xD")
-            atualizarHistorico("Jogador Sem Login", `${ler_dimen()[0]}x${ler_dimen()[1]}`, numBombas, ler_nivel(), "Ganhou")
-            resetGame()
-        }
-        else {
-            displayTable()
-        }
+    if(tabuleiro[x][y] < 0) {
+        alert("Clicou na bomba ow comédia")
+        atualizarHistorico("Jogador Sem Login", `${ler_dimen()[0]}x${ler_dimen()[1]}`, numBombas, ler_nivel(), "Perdeu")
+        resetGame();
+        return;
     }
 
+    tabuleiro[x][y] = 1;
 
+    if (checarVitoria()) {
+        alert("Parabéns! Você ganhou o jogo xD")
+        atualizarHistorico("Jogador Sem Login", `${ler_dimen()[0]}x${ler_dimen()[1]}`, numBombas, ler_nivel(), "Ganhou")
+        resetGame()
+    }
+    else {
+        displayTable()
+    }
 }
 
 // Função de checar vitoria - Emilly
