@@ -10,8 +10,8 @@
 
   <body>
     <div class="div-align">
-      <table class="tabuleiro">
-        <form>
+      <form>
+        <table class="tabuleiro">
           <tr>
             <td class="coluna">Usuário:&nbsp;Jogador Sem Login<br>
 
@@ -31,8 +31,8 @@
               </select>
             </td>
           </tr>
-        </form>
-      </table>
+        </table>
+      </form>
       <br>
       <div id='table-shower'>
         <img alt="Imagem simulando o jogo" src="assets/campo_minado.png">
@@ -47,7 +47,7 @@
       <br>
       <button class="start" onclick="iniciar()">Novo Jogo</button><br><br><br>
       <button class="trapaca" onclick="ativarTrapaca()">Trapaça</button><br><br><br>
-      <caption>Histórico de Partidas</caption>
+      Histórico de Partidas
       <table class="historico">
         <tbody id="tabelaHistorico">
 
@@ -56,7 +56,6 @@
       <br>
       <button class="sair" onclick="window.location.href='index.html'">Sair</button>
     </aside>
+    <script src="code/jogo.js"></script>
   </body>
-  <script src="code/jogo.js"></script>
-
 </html>
