@@ -1,3 +1,8 @@
+<?php
+    require 'pdo.php';
+    execquery($createUsersQuery);
+    execquery($createGamesQuery);
+?>
 <!DOCTYPE html>
 <html lang="pt">
 
@@ -15,10 +20,10 @@
 
         <main>
 
-            <label for="username">Usuário</label>
+            <label for="nickname">Usuário</label>
             <br>
-            <input id="username" type="text" placeholder="Insira o usuário"
-                name="username" required>
+            <input id="nickname" type="text" placeholder="Insira o usuário"
+                name="nickname" required>
 
 
             <br><br>
@@ -36,10 +41,18 @@
                     onclick="window.location.href='jogo.html'">Entrar</button>
                 <br><br>
                 <button type="button"
-                    onclick="window.location.href='cadastro.html'">Criar conta</button>
+                    onclick="window.location.href='cadastro.php'">Criar conta</button>
             </div>
-
         </main>
     </body>
-
+    <script>
+        const hasSignIn = "<?php
+            if($_GET !== null) {
+                echo $_GET['signIn'];
+            }
+        ?>";
+        if (hasSignIn){
+            alert("Cadastro realizado com sucesso!");
+        }
+    </script>
 </html>
