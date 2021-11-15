@@ -32,6 +32,7 @@
 
 	// Usar para inserts
 	function execQuery($qry) {
+		echo 'aaa';
 		$user = 'root';
 		$password = '';
 		try {
