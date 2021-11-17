@@ -49,9 +49,6 @@
 
         <header>
             Login
-            <?php
-            echo $_SESSION['id'].$_SESSION['user_id'];
-            ?>
         </header>
 
         <form id='form_login' action='index.php' method='POST'>

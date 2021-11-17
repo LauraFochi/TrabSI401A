@@ -46,7 +46,7 @@ function cronometro(){
     time++;
 
     var formatar = (pad(time/3600, 2)) + ':' + (pad(time/60, 2)) + ':' + (pad(time%60, 2));
-    if (ler_nivel() === 'classico') {
+    if (ler_nivel() === 'c') {
         document.getElementById('cronometro').innerText = formatar;
     }
     timeCron = formatar
@@ -106,12 +106,12 @@ function iniciar(){
     //para reiniciar o cron
     resetCron();
 
-    if (this.document.getElementById('nivel').value === 'rivotril') {
+    if (this.document.getElementById('nivel').value === 'r') {
         startTimer()
     }
 
     //Inicia o cronometro
-    cron = setInterval(() => { cronometro(); }, umSegundo);
+    cron = setInterval(cronometro, umSegundo);
 
     if(!ler_dimen()) {
         return resetGame();
@@ -363,56 +363,6 @@ const elementoImgTabuleiro = () => {
      `${newDate.getFullYear()}/${newDate.getMonth()+1}/${newDate.getDate()} ${newDate.getHours()}:${newDate.getMinutes()}:${newDate.getSeconds()}`;
     document.getElementById('form_game').submit();
 
-
-
-    // var templateHistorico = {
-    //     t_jogador: jogador,
-    //     t_dimensao: dimensao,
-    //     t_numBombas: numBombas,
-    //     t_modalidade: modalidade,
-    //     t_tempoGasto: timeCron,
-    //     t_resultado: resultado,
-    //     t_pontucao: pontuacao,
-    //     t_data: `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} - ${today.getDate()}/${today.getMonth() +1 }/${today.getFullYear()}`,
-    // };
-
-    // listaHistoricos.push(templateHistorico);
-
-    // var linha = document.createElement('ul')
-    // const lis = [
-    //     document.createElement('li'),
-    //     document.createElement('li'),
-    //     document.createElement('li'),
-    //     document.createElement('li'),
-    //     document.createElement('li'),
-    //     document.createElement('li'),
-    //     document.createElement('li'),
-    //     document.createElement('li')
-    // ]
-    // const lisObject = [
-    //     {texto:"Jogador: " , propName: "t_jogador"},
-    //     {texto:"Dimensao: " , propName: "t_dimensao"},
-    //     {texto:"NumerodeBombas: " , propName: "t_numBombas"},
-    //     {texto:"Modalidade: " , propName: "t_modalidade"},
-    //     {texto:"Tempo levado: ", propName: "t_tempoGasto"},
-    //     {texto:"Resultado: " , propName: "t_resultado"},
-    //     {texto:"Pontuação: ", propName: "t_pontucao"},
-    //     {texto:"", propName: "t_data"},
-    // ]
-    // lis
-    // .map(li => {
-    //     li.className ='historico'
-    //     return li;
-    // })
-    // .map((li, index) => {
-    //     const objList = lisObject[index];
-    //     li.innerText = objList.texto + templateHistorico[objList.propName]
-    //     return li;
-    // })
-    // .forEach(li => linha.appendChild(li));
-    // tabelaHistorico.appendChild(linha)
-
-    // return listaHistoricos;
 }
 
 

@@ -67,9 +67,8 @@
         <table class="tabuleiro">
           <tr>
             <td class="coluna">Usuário:&nbsp;<?php
-            echo $_SESSION['name']
+            echo substr($_SESSION['name'], 0, 20)
             ?><br>
-
               <a>Tempo: </a> <a id="cronometro">00:00:00</a>
             </td>
             <td class="coluna">
@@ -94,7 +93,7 @@
         <img alt="Imagem simulando o jogo" src="assets/campo_minado.png">
       </div>
       <br>
-      <button onclick="window.location.href='edicao.html'">Editar configurações
+      <button onclick="window.location.href='edicao.php'">Editar configurações
         pessoais</button>&nbsp;&nbsp;&nbsp;&nbsp;
       <button onclick="window.location.href='ranking.php'">Visualizar Ranking</button>
     </div>
@@ -106,7 +105,35 @@
       Histórico de Partidas
       <table class="historico">
         <tbody id="tabelaHistorico">
-
+          <?php
+            $queryHistory = "
+              SELECT
+                games.dimension as dimension,
+                games.bomb_amount as bomb_amount,
+                games.mode as mode,
+                games.time_expended as time,
+                games.victory as victory,
+                games.points as points
+                FROM games
+                WHERE user_id = '".$_SESSION['user_id']."'
+                ORDER BY date(game_date) DESC
+                LIMIT 3;
+            ";
+            $histories = execQueryFecth($queryHistory);
+            foreach($histories as $history) {
+              echo "
+                <ul class='historico'>
+                  <li>Jogador: ".$_SESSION['name']."</li>
+                  <li>Dimensao: ".$history['dimension']."</li>
+                  <li>NumerodeBombas: ".$history['bomb_amount']."</li>
+                  <li>Modalidade: ".($history['mode'] === 'c' ? "Clássico": "Rivotril")."</li>
+                  <li>Tempo: ".$history['time']."s</li>
+                  <li>Resultado: ".($history['victory'] ? "Vitória" : "Derrota")."</li>
+                  <li>Pontuação: ".$history['points']."</li>
+                </ul>
+              ";
+            }
+          ?>
         </tbody>
       </table>
       <br>
